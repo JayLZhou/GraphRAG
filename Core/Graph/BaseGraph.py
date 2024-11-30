@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from Core.Common.Utils import mdhash_id
 from typing import Any, Optional, Union, Type
 from Core.Common.ContextMixin import ContextMixin
-from metagpt.provider.llm_provider_registry import create_llm_instance
+
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from Core.Graph.ChunkFactory import get_chunks
 import tiktoken

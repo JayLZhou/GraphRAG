@@ -10,9 +10,9 @@ from typing import DefaultDict, Iterable, Set
 
 from pydantic import BaseModel, Field, SerializeAsAny
 
-from metagpt.const import IGNORED_MESSAGE_ID
-from metagpt.schema import Message
-from metagpt.utils.common import any_to_str, any_to_str_set
+from Core.Common.Constants import IGNORED_MESSAGE_ID
+from Core.Schema.Message import Message
+from Core.Common.Utils import any_to_str, any_to_str_set
 
 
 class Memory(BaseModel):

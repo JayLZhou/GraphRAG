@@ -61,6 +61,10 @@ class VectorIndex():
             await self._update_index_from_lists(data)
         else:
             logger.warning("The type of data is not supported")
+    
+    async def upsert_with_embedding(self, text: str, embedding: List[float], metadata: dict):
+        await self._update_index_from_documents([Document(text = text, embedding = embedding, metadata = metadata)])
+    
     def exist_index(self):
         
         return os.path.exists(self.config.persist_path)

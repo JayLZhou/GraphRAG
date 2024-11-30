@@ -10,8 +10,8 @@ from pydantic import BaseModel, model_validator
 
 from Core.Common.EmbConfig import EmbeddingConfig
 from Core.Common.LLMConfig import LLMConfig, LLMType
-from metagpt.const import CONFIG_ROOT, METAGPT_ROOT
-from metagpt.utils.yaml_model import YamlModel
+from Core.Common.Constants import CONFIG_ROOT, GRAPHRAG_ROOT
+from Core.Utils.YamlModel import YamlModel
 
 
 class CLIParams(BaseModel):
@@ -100,8 +100,8 @@ class Config(CLIParams, YamlModel):
         - Inside default_config_paths, the latter one overwrites the former one
         """
         default_config_paths: List[Path] = [
-            METAGPT_ROOT / "Config/Config2.yaml",
-            CONFIG_ROOT / "config2.yaml",
+            GRAPHRAG_ROOT / "Config/Config2.yaml",
+            CONFIG_ROOT / "Config2.yaml",
         ]
 
         dicts = [dict(os.environ)]

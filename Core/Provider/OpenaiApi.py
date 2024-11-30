@@ -24,14 +24,14 @@ from tenacity import (
 )
 
 from Core.Common.LLMConfig import LLMConfig, LLMType
-from metagpt.const import USE_CONFIG_TIMEOUT
-from metagpt.logs import log_llm_stream, logger
+from Core.Common.Constants import USE_CONFIG_TIMEOUT
+from Core.Common.Logger import log_llm_stream, logger
 from Core.Provider.BaseLLM import BaseLLM
 from Core.Provider.LLM_Provider_Register import register_provider
-from metagpt.utils.common import CodeParser, decode_image, log_and_reraise
-from metagpt.utils.cost_manager import CostManager
-from metagpt.utils.exceptions import handle_exception
-from metagpt.utils.token_counter import (
+from Core.Common.Utils import  log_and_reraise
+from Core.Common.CostManager import CostManager
+from Core.Utils.Exceptions import handle_exception
+from Core.Utils.TokenCounter import (
     count_input_tokens,
     count_output_tokens,
     get_max_completion_tokens,
@@ -208,27 +208,7 @@ class OpenAILLM(BaseLLM):
         """speech to text"""
         return await self.aclient.audio.transcriptions.create(**kwargs)
 
-    async def gen_image(
-        self,
-        prompt: str,
-        size: str = "1024x1024",
-        quality: str = "standard",
-        model: str = None,
-        resp_format: str = "url",
-    ) -> list["Image"]:
-        """image generate"""
-        assert resp_format in ["url", "b64_json"]
-        if not model:
-            model = self.model
-        res = await self.aclient.images.generate(
-            model=model, prompt=prompt, size=size, quality=quality, n=1, response_format=resp_format
-        )
-        imgs = []
-        for item in res.data:
-            img_url_or_b64 = item.url if resp_format == "url" else item.b64_json
-            imgs.append(decode_image(img_url_or_b64))
-        return imgs
-    
+   
     def get_maxtokens(self) -> int:
        self._cons_kwargs['max_tokens']
 

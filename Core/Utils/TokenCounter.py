@@ -10,8 +10,8 @@ import tiktoken
 from openai.types import CompletionUsage
 from openai.types.chat import ChatCompletionChunk
 
-from Common.Logger import logger
-from Utils.AhttpClient import apost
+from Core.Common.Logger import logger
+from Core.Utils.AhttpClient import apost
 
 TOKEN_COSTS = {
     "gpt-3.5-turbo": {"prompt": 0.0015, "completion": 0.002},

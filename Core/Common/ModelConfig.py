@@ -20,7 +20,7 @@ from pydantic import Field, field_validator
 from Core.config2 import merge_dict
 from Core.Common.LLMConfig import LLMConfig
 from Core.Common.Constant import CONFIG_ROOT, METAGPT_ROOT
-from metagpt.utils.yaml_model import YamlModel
+from Core.Utils.YamlModel import YamlModel
 
 
 class ModelsConfig(YamlModel):

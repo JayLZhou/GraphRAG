@@ -1,15 +1,12 @@
 
 from __future__ import annotations
 
-import asyncio
 import json
 import os.path
 import uuid
 from abc import ABC
-from asyncio import Queue, QueueEmpty, wait_for
 from json import JSONDecodeError
-from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Type, TypeVar, Union
+from typing import Any,  Optional, Type, TypeVar, Union
 
 from pydantic import (
     BaseModel,
@@ -20,24 +17,15 @@ from pydantic import (
     model_validator,
 )
 
-from metagpt.const import (
+from Core.Common.Constants import (
     MESSAGE_ROUTE_CAUSE_BY,
     MESSAGE_ROUTE_FROM,
     MESSAGE_ROUTE_TO,
-    MESSAGE_ROUTE_TO_ALL,
-    PRDS_FILE_REPO,
-    SYSTEM_DESIGN_FILE_REPO,
-    TASK_FILE_REPO,
+    MESSAGE_ROUTE_TO_ALL
 )
-from metagpt.logs import logger
-from metagpt.repo_parser import DotClassInfo
-from metagpt.utils.common import any_to_str, any_to_str_set, import_class
-from metagpt.utils.exceptions import handle_exception
-from metagpt.utils.serialize import (
-    actionoutout_schema_to_mapping,
-    actionoutput_mapping_to_str,
-    actionoutput_str_to_mapping,
-)
+from Core.Common.Logger import logger
+from Core.Common.Utils import any_to_str, any_to_str_set
+from Core.Utils.Exceptions import handle_exception
 
 
 class SerializationMixin(BaseModel, extra="forbid"):
@@ -139,35 +127,6 @@ class Document(BaseModel):
         return self.content
 
 
-class Documents(BaseModel):
-    """A class representing a collection of documents.
-
-    Attributes:
-        docs (Dict[str, Document]): A dictionary mapping document names to Document instances.
-    """
-
-    docs: Dict[str, Document] = Field(default_factory=dict)
-
-    @classmethod
-    def from_iterable(cls, documents: Iterable[Document]) -> Documents:
-        """Create a Documents instance from a list of Document instances.
-
-        :param documents: A list of Document instances.
-        :return: A Documents instance.
-        """
-
-        docs = {doc.filename: doc for doc in documents}
-        return Documents(docs=docs)
-
-    def to_action_output(self) -> "ActionOutput":
-        """Convert to action output string.
-
-        :return: A string representing action output.
-        """
-        from metagpt.actions.action_output import ActionOutput
-
-        return ActionOutput(content=self.model_dump_json(), instruct_content=self)
-
 
 class Message(BaseModel):
     """list[<role>: <content>]"""
@@ -185,28 +144,7 @@ class Message(BaseModel):
     def check_id(cls, id: str) -> str:
         return id if id else uuid.uuid4().hex
 
-    @field_validator("instruct_content", mode="before")
-    @classmethod
-    def check_instruct_content(cls, ic: Any) -> BaseModel:
-        if ic and isinstance(ic, dict) and "class" in ic:
-            if "mapping" in ic:
-                # compatible with custom-defined ActionOutput
-                mapping = actionoutput_str_to_mapping(ic["mapping"])
-                actionnode_class = import_class("ActionNode", "metagpt.actions.action_node")  # avoid circular import
-                ic_obj = actionnode_class.create_model_class(class_name=ic["class"], mapping=mapping)
-            elif "module" in ic:
-                # subclasses of BaseModel
-                ic_obj = import_class(ic["class"], ic["module"])
-            else:
-                raise KeyError("missing required key to init Message.instruct_content from dict")
-            ic = ic_obj(**ic["value"])
-        return ic
-
-    # @field_validator("cause_by", mode="before")
-    # @classmethod
-    # def check_cause_by(cls, cause_by: Any) -> str:
-    #     return any_to_str(cause_by if cause_by else import_class("UserRequirement", "metagpt.actions.add_requirement"))
-
+   
     @field_validator("sent_from", mode="before")
     @classmethod
     def check_sent_from(cls, sent_from: Any) -> str:
@@ -221,23 +159,7 @@ class Message(BaseModel):
     def ser_send_to(self, send_to: set) -> list:
         return list(send_to)
 
-    @field_serializer("instruct_content", mode="plain")
-    def ser_instruct_content(self, ic: BaseModel) -> Union[dict, None]:
-        ic_dict = None
-        if ic:
-            # compatible with custom-defined ActionOutput
-            schema = ic.model_json_schema()
-            ic_type = str(type(ic))
-            if "<class 'metagpt.actions.action_node" in ic_type:
-                # instruct_content from AutoNode.create_model_class, for now, it's single level structure.
-                mapping = actionoutout_schema_to_mapping(schema)
-                mapping = actionoutput_mapping_to_str(mapping)
-
-                ic_dict = {"class": schema["title"], "mapping": mapping, "value": ic.model_dump()}
-            else:
-                # due to instruct_content can be assigned by subclasses of BaseModel
-                ic_dict = {"class": schema["title"], "module": ic.__module__, "value": ic.model_dump()}
-        return ic_dict
+  
 
     def __init__(self, content: str = "", **data: Any):
         data["content"] = data.get("content", content)
@@ -344,164 +266,4 @@ class CodingContext(BaseContext):
     code_plan_and_change_doc: Optional[Document] = None
 
 
-class TestingContext(BaseContext):
-    filename: str
-    code_doc: Document
-    test_doc: Optional[Document] = None
 
-
-class RunCodeContext(BaseContext):
-    mode: str = "script"
-    code: Optional[str] = None
-    code_filename: str = ""
-    test_code: Optional[str] = None
-    test_filename: str = ""
-    command: List[str] = Field(default_factory=list)
-    working_directory: str = ""
-    additional_python_paths: List[str] = Field(default_factory=list)
-    output_filename: Optional[str] = None
-    output: Optional[str] = None
-
-
-class RunCodeResult(BaseContext):
-    summary: str
-    stdout: str
-    stderr: str
-
-
-class CodeSummarizeContext(BaseModel):
-    design_filename: str = ""
-    task_filename: str = ""
-    codes_filenames: List[str] = Field(default_factory=list)
-    reason: str = ""
-
-    @staticmethod
-    def loads(filenames: List) -> CodeSummarizeContext:
-        ctx = CodeSummarizeContext()
-        for filename in filenames:
-            if Path(filename).is_relative_to(SYSTEM_DESIGN_FILE_REPO):
-                ctx.design_filename = str(filename)
-                continue
-            if Path(filename).is_relative_to(TASK_FILE_REPO):
-                ctx.task_filename = str(filename)
-                continue
-        return ctx
-
-    def __hash__(self):
-        return hash((self.design_filename, self.task_filename))
-
-
-class BugFixContext(BaseContext):
-    filename: str = ""
-
-
-class CodePlanAndChangeContext(BaseModel):
-    requirement: str = ""
-    issue: str = ""
-    prd_filename: str = ""
-    design_filename: str = ""
-    task_filename: str = ""
-
-    @staticmethod
-    def loads(filenames: List, **kwargs) -> CodePlanAndChangeContext:
-        ctx = CodePlanAndChangeContext(requirement=kwargs.get("requirement", ""), issue=kwargs.get("issue", ""))
-        for filename in filenames:
-            filename = Path(filename)
-            if filename.is_relative_to(PRDS_FILE_REPO):
-                ctx.prd_filename = filename.name
-                continue
-            if filename.is_relative_to(SYSTEM_DESIGN_FILE_REPO):
-                ctx.design_filename = filename.name
-                continue
-            if filename.is_relative_to(TASK_FILE_REPO):
-                ctx.task_filename = filename.name
-                continue
-        return ctx
-
-
-# mermaid class view
-class UMLClassMeta(BaseModel):
-    name: str = ""
-    visibility: str = ""
-
-    @staticmethod
-    def name_to_visibility(name: str) -> str:
-        if name == "__init__":
-            return "+"
-        if name.startswith("__"):
-            return "-"
-        elif name.startswith("_"):
-            return "#"
-        return "+"
-
-
-class UMLClassAttribute(UMLClassMeta):
-    value_type: str = ""
-    default_value: str = ""
-
-    def get_mermaid(self, align=1) -> str:
-        content = "".join(["\t" for i in range(align)]) + self.visibility
-        if self.value_type:
-            content += self.value_type.replace(" ", "") + " "
-        name = self.name.split(":", 1)[1] if ":" in self.name else self.name
-        content += name
-        if self.default_value:
-            content += "="
-            if self.value_type not in ["str", "string", "String"]:
-                content += self.default_value
-            else:
-                content += '"' + self.default_value.replace('"', "") + '"'
-        # if self.abstraction:
-        #     content += "*"
-        # if self.static:
-        #     content += "$"
-        return content
-
-
-class UMLClassMethod(UMLClassMeta):
-    args: List[UMLClassAttribute] = Field(default_factory=list)
-    return_type: str = ""
-
-    def get_mermaid(self, align=1) -> str:
-        content = "".join(["\t" for i in range(align)]) + self.visibility
-        name = self.name.split(":", 1)[1] if ":" in self.name else self.name
-        content += name + "(" + ",".join([v.get_mermaid(align=0) for v in self.args]) + ")"
-        if self.return_type:
-            content += " " + self.return_type.replace(" ", "")
-        # if self.abstraction:
-        #     content += "*"
-        # if self.static:
-        #     content += "$"
-        return content
-
-
-class UMLClassView(UMLClassMeta):
-    attributes: List[UMLClassAttribute] = Field(default_factory=list)
-    methods: List[UMLClassMethod] = Field(default_factory=list)
-
-    def get_mermaid(self, align=1) -> str:
-        content = "".join(["\t" for i in range(align)]) + "class " + self.name + "{\n"
-        for v in self.attributes:
-            content += v.get_mermaid(align=align + 1) + "\n"
-        for v in self.methods:
-            content += v.get_mermaid(align=align + 1) + "\n"
-        content += "".join(["\t" for i in range(align)]) + "}\n"
-        return content
-
-    @classmethod
-    def load_dot_class_info(cls, dot_class_info: DotClassInfo) -> UMLClassView:
-        visibility = UMLClassView.name_to_visibility(dot_class_info.name)
-        class_view = cls(name=dot_class_info.name, visibility=visibility)
-        for i in dot_class_info.attributes.values():
-            visibility = UMLClassAttribute.name_to_visibility(i.name)
-            attr = UMLClassAttribute(name=i.name, visibility=visibility, value_type=i.type_, default_value=i.default_)
-            class_view.attributes.append(attr)
-        for i in dot_class_info.methods.values():
-            visibility = UMLClassMethod.name_to_visibility(i.name)
-            method = UMLClassMethod(name=i.name, visibility=visibility, return_type=i.return_args.type_)
-            for j in i.args:
-                arg = UMLClassAttribute(name=j.name, value_type=j.type_, default_value=j.default_)
-                method.args.append(arg)
-            method.return_type = i.return_args.type_
-            class_view.methods.append(method)
-        return class_view

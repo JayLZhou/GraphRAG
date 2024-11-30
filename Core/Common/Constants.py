@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 from loguru import logger
-
+import Core.Common
 Process_tickers = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
 
 
@@ -29,17 +29,12 @@ Default_text_separator = [
     "\u200b",  # Zero-width space (used in some Asian languages)
 ]
 
-# def get_metagpt_package_root():
-#     """Get the root directory of the installed package."""
-#     package_root = Path(metagpt.__file__).parent.parent
-#     for i in (".git", ".project_root", ".gitignore"):
-#         if (package_root / i).exists():
-#             break
-#     else:
-#         package_root = Path.cwd()
+def get_package_root():
 
-#     logger.info(f"Package root set to {str(package_root)}")
-#     return package_root
+    package_root = Path.cwd()
+
+    return package_root
+
 
 def get_root():
     """Get the project root directory."""
@@ -50,13 +45,13 @@ def get_root():
         logger.info(f"PROJECT_ROOT set from environment variable to {str(project_root)}")
     else:
         # Fallback to package root if no environment variable is set
-        project_root = get_metagpt_package_root()
+        project_root = get_package_root()
+      
     return project_root
 
-GRAPHRAG_ROOT = "test"
-METAGPT_ROOT = 'test'  # Dependent on METAGPT_PROJECT_ROOT
+GRAPHRAG_ROOT = get_root()
 
-CONFIG_ROOT = Path.home() / ".metagpt"
+CONFIG_ROOT = Path.home() / "Config"
 
 
 # Timeout
@@ -70,3 +65,16 @@ DEFAULT_ENTITY_TYPES = ["organization", "person", "geo", "event"]
 DEFAULT_TUPLE_DELIMITER = "<|>"
 DEFAULT_RECORD_DELIMITER = "##"
 DEFAULT_COMPLETION_DELIMITER = "<|COMPLETE|>"
+
+IGNORED_MESSAGE_ID = "0"
+
+
+
+# Used for the Memory 
+
+MESSAGE_ROUTE_FROM = "sent_from"
+MESSAGE_ROUTE_TO = "send_to"
+MESSAGE_ROUTE_CAUSE_BY = "cause_by"
+MESSAGE_META_ROLE = "role"
+MESSAGE_ROUTE_TO_ALL = "<all>"
+MESSAGE_ROUTE_TO_NONE = "<none>"

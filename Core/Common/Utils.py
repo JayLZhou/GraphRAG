@@ -5,6 +5,7 @@ import re
 import numbers
 from Core.Common.Logger import logger
 import tiktoken
+from tenacity import RetryCallState, RetryError, _utils
 import numpy as np
 def singleton(cls):
     instances = {}
@@ -247,3 +248,47 @@ def min_max_normalize(x):
         Returns: A list of normalized values.
     """
     return (x - np.min(x)) / (np.max(x) - np.min(x))
+
+def get_class_name(cls) -> str:
+    """Return class name"""
+    return f"{cls.__module__}.{cls.__name__}"
+
+
+def any_to_str(val: Any) -> str:
+    """Return the class name or the class name of the object, or 'val' if it's a string type."""
+    if isinstance(val, str):
+        return val
+    elif not callable(val):
+        return get_class_name(type(val))
+    else:
+        return get_class_name(val)
+    
+
+
+def log_and_reraise(retry_state: RetryCallState):
+    logger.error(f"Retry attempts exhausted. Last exception: {retry_state.outcome.exception()}")
+    logger.warning(
+        """
+Recommend going to https://deepwisdom.feishu.cn/wiki/MsGnwQBjiif9c3koSJNcYaoSnu4#part-XdatdVlhEojeAfxaaEZcMV3ZniQ
+See FAQ 5.8
+"""
+    )
+    raise retry_state.outcome.exception()
+
+
+def any_to_str_set(val) -> set:
+    """Convert any type to string set."""
+    res = set()
+
+    # Check if the value is iterable, but not a string (since strings are technically iterable)
+    if isinstance(val, (dict, list, set, tuple)):
+        # Special handling for dictionaries to iterate over values
+        if isinstance(val, dict):
+            val = val.values()
+
+        for i in val:
+            res.add(any_to_str(i))
+    else:
+        res.add(any_to_str(val))
+
+    return res

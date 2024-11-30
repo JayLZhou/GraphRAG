@@ -26,7 +26,7 @@ from Core.Common.LLMConfig import LLMConfig
 from Core.Common.Constants import LLM_API_TIMEOUT, USE_CONFIG_TIMEOUT
 from Core.Common.Logger import logger
 from Core.Schema.Message import Message
-from metagpt.utils.common import log_and_reraise
+from Core.Common.Utils import log_and_reraise
 from Core.Common.CostManager import CostManager, Costs
 
 

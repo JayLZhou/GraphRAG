@@ -1,6 +1,6 @@
 from pydantic import field_validator, ConfigDict
 from Core.Common.LLMConfig import LLMConfig
-from metagpt.utils.yaml_model import YamlModel
+from Core.Utils.YamlModel import YamlModel
 from dataclasses import field
 
 

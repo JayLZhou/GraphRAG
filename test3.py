@@ -7,7 +7,7 @@ if __name__ == "__main__":
     graph = ERGraph()
     corpus = json.load(open('./hotpotqa_corpus.json', 'r'))
     keys = list(corpus.keys())
-    retrieval_corpus = [{'idx': i, 'content': key + '\n' + ''.join(corpus[key])} for i, key in enumerate(keys)]
+    retrieval_corpus = [{'id': i, 'content': key + '\n' + ''.join(corpus[key])} for i, key in enumerate(keys)]
     import pdb
     pdb.set_trace()
     chunks = asyncio.run(graph.chunk_documents(retrieval_corpus, is_chunked=True))
