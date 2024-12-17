@@ -1,1 +1,6 @@
-__pycache__/
+Core/__pycache__/
+Core/Chunk/__pycache__/
+Core/Community/__pycache__/
+Core/Graph/__pycache__/
+Core/Storage/__pycache__/
+main.py
