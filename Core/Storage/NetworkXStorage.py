@@ -185,20 +185,26 @@ class NetworkXStorage(BaseGraphStorage):
     async def get_nodes(self):
         return self._graph.nodes()
 
+
     # TODO: remove to the basegraph class
     async def get_nodes_data(self):
         node_list = list(self._graph.nodes())
 
         async def get_node_data(node_id):
-
             node_data = await self.get_node(node_id)
-            if "entity_name" not in node_data:
-                node_data["entity_name"] = ""
-            elif node_data.get("description", "") == "":
-                node_data["content"] = node_data["entity_name"]
-            else:
-                node_data["content"] = "{entity}: {description}".format(entity=node_data["entity_name"],
-                                                                        description=node_data["description"])
+            node_data.setdefault("description", "")
+            node_data.setdefault("entity_type", "")
+            content_parts = []
+            content_parts.append(node_data["entity_name"])
+
+            if node_data["entity_type"]:
+                content_parts.append(f"{node_data['entity_type']}")
+
+            if node_data["description"]:
+                content_parts.append(f"{node_data['description']}")
+
+            node_data["content"] = ": ".join(content_parts) if content_parts else ""
+
             return node_data
 
         nodes = await asyncio.gather(*[get_node_data(node) for node in node_list])
@@ -225,6 +231,40 @@ class NetworkXStorage(BaseGraphStorage):
 
         await asyncio.gather(*[get_edge_data(edge) for edge in edge_list])
         return edges
+
+    async def get_subgraph_from_same_chunk(self):
+        # origin_nodes = await self.get_nodes_data() # list[dict]
+        from Core.Common.Constants import GRAPH_FIELD_SEP
+        origin_edges = await self.get_edges_data() # list[dict]
+
+        from collections import defaultdict
+        # chunk_to_metagraph_nodes = defaultdict(list)  # {"chunk_id": [node1, node2,...]}
+        chunk_to_metagraph_edges = defaultdict(list)  # {"chunk_id": [edge1, edge2,...]}
+        # for node in origin_nodes:
+        #     chunk_to_metagraph_nodes[node['source_id']].append(node)
+        for edge in origin_edges:
+            chunk_to_metagraph_edges[edge["source_id"]].append(edge)
+
+        subgraphs = []
+        async def get_subgraph_data(key, value):
+            subgraph_context = ""
+            for ed in value:
+                seperated_edge = ed["relation_name"].split(GRAPH_FIELD_SEP)
+                tmp = tuple(map(lambda x: ed['src_id'] + " " + x + " " + ed["tgt_id"], seperated_edge))
+                tmp = "; ".join(tmp)
+                subgraph_context += tmp
+                subgraph_context += "; "
+            subgraphs.append({"source_id":key, "content": subgraph_context})
+
+        await asyncio.gather(*[get_subgraph_data(key, value) for key, value in chunk_to_metagraph_edges.items()])
+
+        return subgraphs
+
+
+
+
+
+
 
     async def get_stable_largest_cc(self):
         return NetworkXStorage.stable_largest_connected_component(self._graph)
@@ -285,6 +325,9 @@ class NetworkXStorage(BaseGraphStorage):
         relation_metadata = ["src_id", "tgt_id"]
         return relation_metadata
 
+    async def get_subgraph_metadata(self) -> list[str]:
+        return ["source_id"]
+
     def get_node_num(self):
         return self._graph.number_of_nodes()
 
@@ -308,12 +351,6 @@ class NetworkXStorage(BaseGraphStorage):
         except ValueError:
             return -1
 
-    async def get_edge_relation_name(
-            self, source_node_id: str, target_node_id: str
-    ) -> Union[float, None]:
-        edge_data = self._graph.edges.get((source_node_id, target_node_id))
-        return edge_data.get("relation_name") if edge_data is not None else None
-
     async def get_induced_subgraph(self, nodes: list[str]):
         return self._graph.subgraph(nodes)
 
@@ -335,6 +372,48 @@ class NetworkXStorage(BaseGraphStorage):
             self.edge_list = list(self._graph.edges())
 
         return await self.get_edge(self.edge_list[index][0], self.edge_list[index][1])
+
+    async def find_k_hop_neighbors(self, start_node: str, k: int) -> set:
+        """
+        find the k hop neighbors about the given input node
+        :param start_node: str, entity_name
+        :param k: int, k hop value
+        :return: K hop sets(including start_node)
+        """
+        if k < 1:
+            raise ValueError("K-hop neighbours value must greater than 1.")
+
+        visited = set()
+        current_level = {start_node}
+
+        for _ in range(k):
+            next_level = set()  # 下一层的节点
+            for node in current_level:
+                neighbors = set(await self.neighbors(node))
+                next_level.update(neighbors - visited)
+            visited.update(next_level)
+            current_level = next_level
+
+        return current_level
+
+    async def find_k_hop_neighbors_batch(self, start_nodes: list[str], k: int) -> set:
+        nodes_set_list = await asyncio.gather(
+            *[self.find_k_hop_neighbors(node, k) for node in start_nodes]
+        )
+        nodes_list = []
+        for node_set in nodes_set_list:
+            nodes_list.extend(list(node_set))
+        return set(nodes_list)
+
+    async def get_edge_relation_name(self, source_node_id: str, target_node_id: str):
+        edge_data = self._graph.edges.get((source_node_id, target_node_id))
+        return edge_data.get("relation_name") if edge_data is not None else None
+
+    async def get_edge_relation_name_batch(self, edges: list[tuple[str, str]]):
+        relations = await asyncio.gather(
+            *[self.get_edge_relation_name(edge[0], edge[1]) for edge in edges]
+        )
+        return relations
 
     def clear(self):
         self._graph = nx.Graph()

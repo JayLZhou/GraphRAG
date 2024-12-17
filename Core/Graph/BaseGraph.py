@@ -284,11 +284,17 @@ class BaseGraph(ABC):
     async def edges_data(self, need_content=True):
         return await self._graph.get_edges_data(need_content)
 
+    async def subgraphs_data(self):
+        return await self._graph.get_subgraph_from_same_chunk()
+
     async def node_metadata(self):
         return await self._graph.get_node_metadata()
 
     async def edge_metadata(self):
         return await self._graph.get_edge_metadata()
+
+    async def subgraph_metadata(self):
+        return await self._graph.get_subgraph_metadata()
 
     async def stable_largest_cc(self):
         if isinstance(self._graph, NetworkXStorage):
@@ -353,7 +359,7 @@ class BaseGraph(ABC):
     def edge_num(self):
         return self._graph.get_edge_num()
 
-    async def get_induced_subgraph(self, nodes: list[str]):
+    def get_induced_subgraph(self, nodes: list[str]):
         return self._graph.get_induced_subgraph(nodes)
 
     async def get_entities_to_relationships_map(self, is_directed=False):
@@ -434,5 +440,12 @@ class BaseGraph(ABC):
     async def get_nodes(self):
         return await self._graph.nodes()
 
+    async def find_k_hop_neighbors_batch(self, start_nodes: list[str], k: int):
+        return await self._graph.find_k_hop_neighbors_batch(start_nodes=start_nodes, k=k)  # set
+
+    async def get_edge_relation_name_batch(self, edges: list[tuple[str, str]]):
+        return await self._graph.get_edge_relation_name_batch(edges=edges)
+
     async def _clear(self):
         self._graph.clear()
+
