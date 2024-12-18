@@ -1,0 +1,57 @@
+################################# Working settings  #################################
+# Basic Config
+use_entities_vdb: True
+use_relations_vdb: True  # Only set True for LightRAG, ToG and GR
+use_subgraphs_vdb: True  # Only set True for Medical-GraphRAG
+llm_model_max_token_size: 32768
+use_entity_link_chunk: False  # Only set True for HippoRAG and FastGraphRAG
+enable_graph_augmentation: False
+
+# Data
+index_name: er_graph
+vdb_type: vector  # vector/colbert
+
+# Chunk Config
+chunk:
+  chunk_token_size: 1200
+  chunk_overlap_token_size: 100
+  token_model: gpt-3.5-turbo
+  chunk_method: chunking_by_token_size
+
+# Graph Config
+graph:
+    # enable LightRAG
+    enable_edge_keywords: True
+    graph_type: er_graph # rkg_graph/er_graph/tree_graph/passage_graph
+    force: False
+    # Building graph
+    extract_two_step: False
+    max_gleaning: 1
+    enable_entity_description: True
+    enable_entity_type: True
+    enable_edge_description: False
+    enable_edge_name: True
+
+# Retrieval Config
+retriever:
+    query_type: med
+    enable_local: False
+    use_entity_similarity_for_ppr: False
+    node_specificity: False
+    # Medical
+    top_k: 3
+    use_relations_vdb: True
+    use_subgraphs_vdb: True
+
+query:
+    query_type: qa
+    only_need_context: False
+    enable_hybrid_query: True
+    augmentation_ppr: False
+    response_type: Multiple Paragraphs
+    entities_max_tokens: 2000
+    relationships_max_tokens: 2000
+
+    # Medical graphrag
+    topk_entity: 5
+    k_hop: 2
