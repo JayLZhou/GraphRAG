@@ -13,6 +13,7 @@ class MixRetriever:
         self.retrievers[Retriever.COMMUNITY] = CommunityRetriever(**self.context.as_dict)
         self.retrievers[Retriever.CHUNK] = ChunkRetriever(**self.context.as_dict)
         self.retrievers[Retriever.RELATION] = RelationshipRetriever(**self.context.as_dict)
+        self.retrievers[Retriever.SUBGRAPH] = SubgraphRetriever(**self.context.as_dict)
 
     async def retrieve_relevant_content(self, type: Retriever, mode: str, **kwargs):
         return await self.retrievers[type].retrieve_relevant_content(mode=mode, **kwargs)
