@@ -76,14 +76,13 @@ class ERGraph(BaseGraph):
         )
 
         knowledge_graph_generation_msg = Message(role="Graphify", content=knowledge_graph_generation)
-
         content = await self.llm.aask(knowledge_graph_generation_msg.content)
-
+        # import pdb
+        # pdb.set_trace()
         return content
 
     async def _build_graph(self, chunk_list: List[Any]):
         try:
-
             results = await asyncio.gather(
                 *[self._extract_entity_relationship(chunk) for chunk in chunk_list])
             # Build graph based on the extracted entities and triples
@@ -98,23 +97,29 @@ class ERGraph(BaseGraph):
         maybe_nodes, maybe_edges = defaultdict(list), defaultdict(list)
 
         # Extract nodes
-        for match in re.finditer(NODE_PATTERN, content):
-            entity_name, entity_type = match.groups()
+        matches = re.findall(NODE_PATTERN, content)
+        for match in matches:
+            entity_name, entity_type = match
             entity_name = clean_str(entity_name)
+            entity_type = clean_str(entity_type)
             if entity_name not in maybe_nodes:
                 entity = Entity(entity_name=entity_name, entity_type=entity_type, source_id=chunk_key)
                 maybe_nodes[entity_name].append(entity)
 
         # Extract relationships
-
-        for match in re.finditer(REL_PATTERN, content):
-            src_id, _, tgt_id, _, rel_type = match.groups()
+        matches = re.findall(REL_PATTERN, content)
+        for match in matches:
+            src_id, _, tgt_id, _, rel_type = match
+            src_id = clean_str(src_id)
+            tgt_id = clean_str(tgt_id)
+            rel_type = clean_str(rel_type)
             if src_id in maybe_nodes and tgt_id in maybe_nodes:
                 relationship = Relationship(
                     src_id=clean_str(src_id), tgt_id=clean_str(tgt_id), source_id=chunk_key,
                     relation_name=clean_str(rel_type)
                 )
                 maybe_edges[(src_id, tgt_id)].append(relationship)
+
         return maybe_nodes, maybe_edges
 
     @staticmethod

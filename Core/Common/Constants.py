@@ -84,10 +84,9 @@ MESSAGE_ROUTE_TO_NONE = "<none>"
 # Used for Medical-Graph-RAG like
 
 NODE_PATTERN = r"Node\(id='(.*?)', type='(.*?)'\)"
-REL_PATTERN = (
-    r"Relationship\(subj=Node\(id='(.*?)', type='(.*?)'\), "
-    r"obj=Node\(id='(.*?)', type='(.*?)'\), type='(.*?)'\)"
-)
+REL_PATTERN  = r"Relationship\(subj=Node\(id='(.*?)', type='(.*?)'\), obj=Node\(id='(.*?)', type='(.*?)'\), type='(.*?)'\)"
+
+# Relationship(subj=Node(id=\'Scott Derrickson\', type=\'Person\'), obj=Node(id=\'Deliver Us From Evil\', type=\'Film\')
 
 # For wiki-link
 GCUBE_TOKEN = '07e1bd33-c0f5-41b0-979b-4c9a859eec3f-843339462'
@@ -103,3 +102,4 @@ class Retriever(Enum):
     RELATION = "relationship"
     CHUNK = "chunk"
     COMMUNITY = "community"
+    SUBGRAPH = "subgraph"

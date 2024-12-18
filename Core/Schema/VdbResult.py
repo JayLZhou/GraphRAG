@@ -27,6 +27,7 @@ class ColbertNodeResult(EntityResult):
             return nodes, [r for r in self.scores]
         else:
             return nodes
+
 class VectorIndexNodeResult(EntityResult):
     def __init__(self, results):
         self.results = results
@@ -49,6 +50,7 @@ class VectorIndexNodeResult(EntityResult):
             return nodes, [r.score for r in self.results]
         else:
             return nodes
+
 class RelationResult(ABC):
     @abstractmethod
     def get_edge_data(self):
@@ -66,6 +68,24 @@ class  VectorIndexEdgeResult(RelationResult):
             return nodes, [r.score for r in self.results]
         else:
             return nodes
+
+
+class SubgraphResult(ABC):
+    @abstractmethod
+    def get_subgraph_data(self):
+        pass
+
+
+class  VectorIndexSubgraphResult(SubgraphResult):
+    def __init__(self, results):
+        self.results = results
+
+    async def get_subgraph_data(self,score = False):
+        subgraphs_data = list(map(lambda x: {"source_id" : x.metadata["source_id"], "subgraph_content": x.text}, self.results))
+        if score:
+            return subgraphs_data, [r.score for r in self.results]
+        else:
+            return subgraphs_data
         
 class ColbertEdgeResult(RelationResult):
     def __init__(self, edge_idxs, ranks, scores):

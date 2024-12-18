@@ -1,1 +1,11 @@
 __pycache__/
+**/__pycache__
+Clustering nodes/
+hotpotqa/
+yaodong/
+Core/Chunk/__pycache__/DocChunk.cpython-311.pyc
+Core/Chunk/__pycache__/Tokensize.cpython-311.pyc
+Core/Community/__pycache__/LeidenCommunity.cpython-311.pyc
+Core/Graph/__pycache__/ERGraph.cpython-311.pyc
+Core/Storage/__pycache__/ChunkKVStorage.cpython-311.pyc
+Core/__pycache__/GraphRAG.cpython-311.pyc
