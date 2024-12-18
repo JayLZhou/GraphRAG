@@ -52,3 +52,7 @@ class QueryConfig(YamlModel):
     max_txt_len: int = 512
     topk_e: int = 3
     cost_e: float = 0.5
+
+    # For Medical GraphRAG
+    topk_entity: int = 10
+    k_hop: int = 2

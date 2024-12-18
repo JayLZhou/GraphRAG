@@ -33,9 +33,11 @@ class EntityRetriever(BaseRetriever):
         return nodes, ppr_node_matrix
 
     @register_retriever_method(type="entity", method_name="vdb")
-    async def _find_relevant_entities_vdb(self, seed, tree_node=False):
+    async def _find_relevant_entities_vdb(self, seed, tree_node=False, top_k=None):
         try:
-            node_datas = await self.entities_vdb.retrieval_nodes(seed, self.config.top_k, self.graph,
+            if top_k is None:
+                top_k = self.config.top_k
+            node_datas = await self.entities_vdb.retrieval_nodes(query=seed, top_k=top_k, graph=self.graph,
                                                                  tree_node=tree_node)
 
             if not len(node_datas):
@@ -96,8 +98,7 @@ class EntityRetriever(BaseRetriever):
 
     @register_retriever_method(type="entity", method_name="get_all")
     async def _get_all_entities(self):
-        nodes = await self.graph._graph.get_nodes_data()
-
+        nodes = await self.graph.nodes_data()
         return nodes
 
     @register_retriever_method(type="entity", method_name="from_relation_by_agent")

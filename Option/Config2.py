@@ -31,6 +31,7 @@ class Config(WorkingParams, YamlModel):
     # Basic Config
     use_entities_vdb: bool = True
     use_relations_vdb: bool = True  # Only set True for LightRAG
+    use_subgraphs_vdb: bool = True  # Only set True for Medical-GraphRAG
     vdb_type: str = "vector"  # vector/colbert
     token_model: str = "gpt-3.5-turbo"
     

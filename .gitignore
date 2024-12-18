@@ -1,1 +1,13 @@
 __pycache__/
+**/__pycache__/
+Clustering nodes/
+hotpotqa/
+yaodong/
+**/**/__pycache__/
+Core/Chunk/__pycache__/
+Core/Community/__pycache__/
+Core/Graph/__pycache__/
+Core/Storage/__pycache__/
+Core/__pycache__/
+main.py/
+test.py/
