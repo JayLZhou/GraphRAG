@@ -1,0 +1,119 @@
+2024-12-16 14:16:27.984 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_node_map.json with 0 data
+2024-12-16 14:16:27.984 | ERROR    | Core.Community.LeidenCommunity:_load_cluster_map:277 - ❌ Failed to load community <-> node map.
+2024-12-16 14:16:27.989 | INFO     | Core.Community.LeidenCommunity:_clustering:63 - Each level has communities: {0: 21, 1: 36}
+2024-12-16 14:16:27.991 | INFO     | Core.Storage.JsonKVStorage:persist:29 - Write KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_node_map.json with 318 data
+2024-12-16 14:16:27.992 | INFO     | Core.Community.BaseCommunity:generate_community_report:26 - Generating community report...
+2024-12-16 14:16:27.992 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_report.json with 0 data
+2024-12-16 14:16:27.992 | ERROR    | Core.Community.LeidenCommunity:_load_community_report:260 - Failed to load community report.
+2024-12-16 14:16:27.993 | INFO     | Core.Storage.NetworkXStorage:_cluster_data_to_subgraphs:159 - Rewrite the graph with cluster data
+2024-12-16 14:16:27.993 | INFO     | Core.Storage.NetworkXStorage:_persist:109 - Writing graph into /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/graph_storage_nx_data.graphml
+2024-12-16 14:16:27.994 | INFO     | Core.Storage.NetworkXStorage:write_nx_graph:45 - Writing graph with 938 nodes, 879 edges
+2024-12-16 14:16:28.052 | INFO     | Core.Community.LeidenCommunity:_generate_community_report:82 - Generating by levels: [1, 0]
+2024-12-16 14:16:31.785 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:31.820 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:31.929 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:31.940 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.001 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.032 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.048 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.060 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.112 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.225 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.282 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.288 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.302 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.311 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.387 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.399 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.433 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.439 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.450 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.591 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.642 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.685 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.691 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:32.745 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.168 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.174 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.219 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.288 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.445 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.459 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.820 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.827 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:34.834 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:35.019 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:36.496 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:36.785 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:39.902 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:39.955 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:40.046 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:40.204 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:40.471 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:40.588 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:40.685 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:40.952 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:40.989 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.214 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.246 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.308 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.421 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.426 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.436 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.493 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.524 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:41.926 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 5.090(s), this was the 1st time calling it.
+2024-12-16 14:16:41.997 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 5.130(s), this was the 1st time calling it.
+2024-12-16 14:16:42.897 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:45.083 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Llama-3-8b-chat-hf not found in TOKEN_COSTS.
+2024-12-16 14:16:48.253 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 11.417(s), this was the 2nd time calling it.
+2024-12-16 14:16:48.442 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 11.574(s), this was the 2nd time calling it.
+2024-12-16 14:16:55.328 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 18.461(s), this was the 3rd time calling it.
+2024-12-16 14:16:55.460 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 18.625(s), this was the 3rd time calling it.
+2024-12-16 14:17:02.704 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 25.837(s), this was the 4th time calling it.
+2024-12-16 14:17:04.635 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 27.799(s), this was the 4th time calling it.
+2024-12-16 14:17:12.244 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 35.377(s), this was the 5th time calling it.
+2024-12-16 14:17:13.689 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 36.853(s), this was the 5th time calling it.
+2024-12-16 14:17:21.428 | WARNING  | tenacity.after:log_it:44 - Finished call to 'Core.Provider.OpenaiApi.OpenAILLM.acompletion_text' after 44.561(s), this was the 6th time calling it.
+2024-12-16 14:17:21.429 | ERROR    | Core.Common.Utils:log_and_reraise:286 - Retry attempts exhausted. Last exception: Error code: 503 - {'status': 'error', 'message': 'Sorry, something went wrong when the server processing your request, please try again later. if you need some assistance or have some questions about this, please contact us.'}
+2024-12-16 14:17:21.430 | WARNING  | Core.Common.Utils:log_and_reraise:287 - 
+Recommend going to https://deepwisdom.feishu.cn/wiki/MsGnwQBjiif9c3koSJNcYaoSnu4#part-XdatdVlhEojeAfxaaEZcMV3ZniQ
+See FAQ 5.8
+
+2024-12-16 14:39:42.674 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_node_map.json with 318 data
+2024-12-16 14:39:42.674 | INFO     | Core.Community.LeidenCommunity:_load_cluster_map:280 - ✅ Successfully loaded community <-> node map.
+2024-12-16 14:39:42.675 | INFO     | Core.Community.BaseCommunity:generate_community_report:26 - Generating community report...
+2024-12-16 14:39:42.675 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_report.json with 0 data
+2024-12-16 14:39:42.675 | ERROR    | Core.Community.LeidenCommunity:_load_community_report:260 - Failed to load community report.
+2024-12-16 15:01:36.541 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_node_map.json with 0 data
+2024-12-16 15:01:36.541 | ERROR    | Core.Community.LeidenCommunity:_load_cluster_map:277 - ❌ Failed to load community <-> node map.
+2024-12-16 15:01:36.541 | INFO     | Core.Community.LeidenCommunity:_clustering:63 - Each level has communities: {0: 2}
+2024-12-16 15:01:36.542 | INFO     | Core.Storage.JsonKVStorage:persist:29 - Write KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_node_map.json with 15 data
+2024-12-16 15:01:36.542 | INFO     | Core.Community.BaseCommunity:generate_community_report:26 - Generating community report...
+2024-12-16 15:01:36.542 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_report.json with 0 data
+2024-12-16 15:01:36.542 | ERROR    | Core.Community.LeidenCommunity:_load_community_report:260 - Failed to load community report.
+2024-12-16 15:01:36.543 | INFO     | Core.Storage.NetworkXStorage:_cluster_data_to_subgraphs:159 - Rewrite the graph with cluster data
+2024-12-16 15:01:36.543 | INFO     | Core.Storage.NetworkXStorage:_persist:109 - Writing graph into /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/graph_storage_nx_data.graphml
+2024-12-16 15:01:36.543 | INFO     | Core.Storage.NetworkXStorage:write_nx_graph:45 - Writing graph with 26 nodes, 14 edges
+2024-12-16 15:01:36.545 | INFO     | Core.Community.LeidenCommunity:_generate_community_report:82 - Generating by levels: [0]
+2024-12-16 15:01:39.695 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo not found in TOKEN_COSTS.
+2024-12-16 15:01:41.631 | WARNING  | Core.Common.CostManager:update_cost:49 - Model TA/meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo not found in TOKEN_COSTS.
+2024-12-16 15:01:41.632 | INFO     | Core.Storage.JsonKVStorage:persist:29 - Write KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_report.json with 2 data
+2024-12-16 15:01:41.632 | INFO     | Core.Community.BaseCommunity:generate_community_report:34 - ✅ [Community Report]  Finished
+2024-12-16 15:01:41.632 | INFO     | Core.GraphRAG:_build_retriever_context:169 - Building retriever context for the current execution
+2024-12-16 15:10:29.571 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_node_map.json with 15 data
+2024-12-16 15:10:29.572 | INFO     | Core.Community.LeidenCommunity:_load_cluster_map:280 - ✅ Successfully loaded community <-> node map.
+2024-12-16 15:10:29.572 | INFO     | Core.Community.BaseCommunity:generate_community_report:26 - Generating community report...
+2024-12-16 15:10:29.572 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_report.json with 2 data
+2024-12-16 15:10:29.573 | INFO     | Core.Community.LeidenCommunity:_load_community_report:264 - Successfully loaded community report.
+2024-12-16 15:10:29.573 | INFO     | Core.Community.BaseCommunity:generate_community_report:34 - ✅ [Community Report]  Finished
+2024-12-16 15:10:29.573 | INFO     | Core.GraphRAG:_build_retriever_context:169 - Building retriever context for the current execution
+2024-12-16 15:18:22.913 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_node_map.json with 15 data
+2024-12-16 15:18:22.914 | INFO     | Core.Community.LeidenCommunity:_load_cluster_map:280 - ✅ Successfully loaded community <-> node map.
+2024-12-16 15:18:22.914 | INFO     | Core.Community.BaseCommunity:generate_community_report:26 - Generating community report...
+2024-12-16 15:18:22.914 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_report.json with 2 data
+2024-12-16 15:18:22.915 | INFO     | Core.Community.LeidenCommunity:_load_community_report:264 - Successfully loaded community report.
+2024-12-16 15:18:22.915 | INFO     | Core.Community.BaseCommunity:generate_community_report:34 - ✅ [Community Report]  Finished
+2024-12-16 15:18:22.915 | INFO     | Core.GraphRAG:_build_retriever_context:169 - Building retriever context for the current execution
+2024-12-16 16:59:08.948 | INFO     | Core.Storage.JsonKVStorage:load:33 - Load KV /home/yingli/yaodong_codes/GraphRAG/hotpotqa/kg_graph/community_storage_community_node_map.json with 0 data
+2024-12-16 16:59:08.949 | ERROR    | Core.Community.LeidenCommunity:_load_cluster_map:277 - ❌ Failed to load community <-> node map.

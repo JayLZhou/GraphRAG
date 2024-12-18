@@ -6,7 +6,7 @@ from llama_index.core.schema import (
     Document
 )
 from llama_index.core import StorageContext, load_index_from_storage, VectorStoreIndex, Settings
-from Core.Index.BaseIndex import BaseIndex, VectorIndexNodeResult, VectorIndexEdgeResult
+from Core.Index.BaseIndex import BaseIndex, VectorIndexNodeResult, VectorIndexEdgeResult, VectorIndexSubgraphResult
 import asyncio
 from llama_index.core.node_parser import SimpleNodeParser
 from llama_index.core.schema import QueryBundle
@@ -44,6 +44,13 @@ class VectorIndex(BaseIndex):
         result = VectorIndexEdgeResult(results)
 
         return await result.get_edge_data(graph, need_score)
+
+    async def retrieval_subgraphs(self, query, top_k, need_score=False):
+
+        results = await self.retrieval(query, top_k)
+        result = VectorIndexSubgraphResult(results)
+
+        return await result.get_subgraph_data(need_score)
 
     async def retrieval_batch(self, queries, top_k):
         pass

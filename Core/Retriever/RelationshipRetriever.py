@@ -10,7 +10,7 @@ class RelationshipRetriever(BaseRetriever):
     def __init__(self, **kwargs):
         config = kwargs.pop("config")
         super().__init__(config)
-        self.mode_list = ["entity_occurrence", "from_entity", "ppr", "vdb", "from_entity_by_agent", "get_all"]
+        self.mode_list = ["entity_occurrence", "from_entity", "ppr", "vdb", "from_entity_by_agent", "get_all", "by_source&target"]
         self.type = "relationship"
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -29,11 +29,14 @@ class RelationshipRetriever(BaseRetriever):
         return await self._construct_relationship_context(edges)
 
     @register_retriever_method(type="relationship", method_name="vdb")
-    async def _find_relevant_relations_vdb(self, seed, need_score=False, need_context=True):
+    async def _find_relevant_relations_vdb(self, seed, need_score=False, need_context=True, top_k=None):
         try:
             if seed is None: return None
             assert self.config.use_relations_vdb
-            edge_datas = await self.relations_vdb.retrieval_edges(seed, top_k=self.config.top_k, graph=self.graph,
+            if top_k is None:
+                top_k = self.config.top_k
+
+            edge_datas = await self.relations_vdb.retrieval_edges(query=seed, top_k=top_k, graph=self.graph,
                                                                   need_score=need_score)
 
             if not len(edge_datas):
@@ -95,10 +98,8 @@ class RelationshipRetriever(BaseRetriever):
             from Core.Prompt.TogPrompt import extract_relation_prompt
 
             # get relations from graph
-            edges = await self.graph._graph.get_node_edges(source_node_id=entity)
-            relations_name_super_edge = await asyncio.gather(
-                *[self.graph._graph.get_edge_relation_name(edge[0], edge[1]) for edge in edges]
-            )
+            edges = await self.graph.get_node_edges(source_node_id=entity)
+            relations_name_super_edge = await self.graph.get_edge_relation_name_batch(edges=edges)
             relations_name = list(map(lambda x: x.split(GRAPH_FIELD_SEP), relations_name_super_edge))  # [[], [], []]
 
             relations_dict = defaultdict(list)
@@ -176,5 +177,9 @@ class RelationshipRetriever(BaseRetriever):
 
     @register_retriever_method(type="relationship", method_name="get_all")
     async def _get_all_relationships(self):
-        edges = await self.graph._graph.get_edges_data()
+        edges = await self.graph.edges_data()
         return edges
+
+    @register_retriever_method(type="relationship", method_name="by_source&target")
+    async def _get_relationships_by_source_target(self, seed: list[tuple[str, str]]):
+        return await self.graph.get_edge_relation_name_batch(edges=seed)
