@@ -3,6 +3,7 @@ Please refer to the camel agent, which is used to align the prompt for MedicalRA
 """
 from typing import Any, Callable, Dict, Optional, Set, TypeVar, Union
 import inspect
+import re
 
 T = TypeVar('T')
 def return_prompt_wrapper(
@@ -71,6 +72,23 @@ def wrap_prompt_functions(cls: T) -> T:
     return cls
 
 
+def get_prompt_template_key_words(template: str) -> Set[str]:
+    r"""Given a string template containing curly braces {}, return a set of
+    the words inside the braces.
+
+    Args:
+        template (str): A string containing curly braces.
+
+    Returns:
+        List[str]: A list of the words inside the curly braces.
+
+    Example:
+        >>> get_prompt_template_key_words('Hi, {name}! How are you {status}?')
+        {'name', 'status'}
+    """
+    return set(re.findall(r'{([^}]*)}', template))
+
+
 @wrap_prompt_functions
 class TextPrompt(str):
     r"""A class that represents a text prompt. The :obj:`TextPrompt` class
@@ -82,6 +100,10 @@ class TextPrompt(str):
             prompt.
     """
 
+    @property
+    def key_words(self) -> Set[str]:
+        r"""Returns a set of strings representing the keywords in the prompt."""
+        return get_prompt_template_key_words(self)
 
 
     def format(self, *args: Any, **kwargs: Any) -> 'TextPrompt':

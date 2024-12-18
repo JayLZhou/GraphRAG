@@ -86,6 +86,8 @@ class GraphRAG(ContextMixin, BaseModel):
             data.entities_vdb_namespace = data.workspace.make_for("entities_vdb")
         if data.config.use_relations_vdb:
             data.relations_vdb_namespace = data.workspace.make_for("relations_vdb")
+        if data.config.use_subgraphs_vdb:
+            data.subgraphs_vdb_namespace = data.workspace.make_for("subgraphs_vdb")
         if data.config.graph.use_community:
             data.community_namespace = data.workspace.make_for("community_storage")
         if data.config.use_entity_link_chunk:
@@ -104,6 +106,10 @@ class GraphRAG(ContextMixin, BaseModel):
         if data.config.use_relations_vdb:
             cls.relations_vdb = get_index(
                 get_index_config(data.config, persist_path=data.relations_vdb_namespace.get_save_path()))
+        if data.config.use_subgraphs_vdb:
+            cls.subgraphs_vdb = get_index(
+                get_index_config(data.config, persist_path=data.subgraphs_vdb_namespace.get_save_path()))
+
         return data
 
     @classmethod
@@ -152,6 +158,7 @@ class GraphRAG(ContextMixin, BaseModel):
             "llm": True,
             "entities_vdb": data.config.use_entities_vdb,
             "relations_vdb": data.config.use_relations_vdb,
+            "subgraphs_vdb": data.config.use_subgraphs_vdb,
             "community": data.config.graph.use_community,
             "relationships_to_chunks": data.config.use_entity_link_chunk,
             "entities_to_relationships": data.config.use_entity_link_chunk,
@@ -253,6 +260,12 @@ class GraphRAG(ContextMixin, BaseModel):
                 return
             await self.relations_vdb.build_index(await self.graph.edges_data(), edge_metadata, force=False)
 
+        if self.config.use_subgraphs_vdb:
+            subgraph_metadata = await self.graph.subgraph_metadata()
+            if not subgraph_metadata:
+                logger.warning("No node metadata found. Skipping subgraph indexing.")
+
+            await self.subgraphs_vdb.build_index(await self.graph.subgraphs_data(), subgraph_metadata, force=False)
           
         if self.config.graph.use_community:
 

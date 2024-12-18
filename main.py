@@ -54,11 +54,6 @@ if __name__ == "__main__":
 
     asyncio.run(digimon.insert(corpus))
 
-    # for train_item in dataloader:
-
-    # a = asyncio.run(digimon.query("Who is Fred Gehrke?"))
-
-
-
-
+    a = asyncio.run(digimon.query("What is Ed Wood?"))
     # asyncio.run(digimon.query("Who is Scrooge?"))
+    print(a)
